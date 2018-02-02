@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import axios from 'axios';
 import debounce from 'lodash.debounce';
-import store from '../stores/configureStore';
-
-
+import {connect} from 'react-redux';
 class FeesTable extends React.Component {
     render() {
         var {conversionRate, fee, total, originCurrency, destinationCurrency} = this.props;
@@ -139,7 +137,7 @@ class Conversion extends React.Component {
         newAmount = newAmount.replace(',','')
 
         // optimistic field updates
-        store.dispatch({type:"CHANGE_ORIGIN_AMOUNT", data:{newAmount:newAmount}});
+        this.props.dispatch({type:"CHANGE_ORIGIN_AMOUNT", data:{newAmount:newAmount}});
         //this.setState({originAmount: newAmount});
 
         // get the new dest amount
@@ -254,7 +252,7 @@ class Conversion extends React.Component {
     }
 
     render() {
-        console.log('this.props.originAmount: '+this.props.originAmount);
+        //console.log('this.props: ',this.props);
         if (this.state.errorMsg) {
             var errorMsg = <div className="errorMsg">{this.state.errorMsg}</div>
         }
@@ -290,5 +288,17 @@ class Conversion extends React.Component {
         )
     }
 }
+export default connect((state,props)=>{
+    return {
+        originAmount: state.originAmount
+    }
+})(Conversion);
 
-export default Conversion;
+
+// export default connect(function mapStateToProps(state,props){
+//     console.log('connect state:', state);
+//     console.log('connect props:', props);
+//     return {
+//             originAmount: state.originAmount
+//     }
+// })(Conversion);

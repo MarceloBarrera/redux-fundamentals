@@ -38,5 +38,6 @@ dist
 npm-debug.log
 
 build
+public/js/build
 
 todo.md
