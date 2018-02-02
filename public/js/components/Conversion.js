@@ -1,7 +1,34 @@
 import React from 'react';
+import {createStore} from 'redux';
 import PropTypes from 'prop-types'
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+
+var defaultSate = {
+    originAmount:'0.00'
+};
+
+//reducer
+function amount(state = defaultSate ,action){
+    if(action.type==='CHANGE_ORIGIN_AMOUNT'){
+       //return Object.assign({}, state,{originAmount:action.data});
+        return {
+            ...state,
+            originAmount:action.data
+        }
+    }
+    return state;
+}
+
+var store = createStore(amount);
+
+store.subscribe(function(){
+    console.log('state', store.getState());
+});
+
+store.dispatch({type:'CHANGE_ORIGIN_AMOUNT',data:'300.65'});
+store.dispatch({type:''});
+store.dispatch({type:''});
 
 class FeesTable extends React.Component {
     render() {
