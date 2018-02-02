@@ -1,4 +1,5 @@
-import {createStore} from 'redux';
+import {applyMiddleware, createStore} from 'redux';
+import logger from 'redux-logger';
 
 var defaultSate = {
     originAmount:'0.00'
@@ -6,7 +7,6 @@ var defaultSate = {
 
 //reducer
 function amount(state = defaultSate ,action){
-    console.log(state);
     if(action.type==='CHANGE_ORIGIN_AMOUNT'){
         //return Object.assign({}, state,{originAmount:action.data});
         return {
@@ -17,6 +17,6 @@ function amount(state = defaultSate ,action){
     return state;
 }
 
-var store = createStore(amount);
+var store = createStore(amount, applyMiddleware(logger));
 
 export default store;
