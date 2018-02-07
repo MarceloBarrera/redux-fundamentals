@@ -19,7 +19,7 @@ function amount(state = defaultSate ,action){
             originAmount: action.data.newAmount
         }
     }
-    if(action.type==='RECEIVED_CONVERSION_RATE'){
+    else if(action.type==='RECEIVED_CONVERSION_RATE_SUCCESS'){
         return {
             ...state,
             conversionRate: action.data.xRate,
