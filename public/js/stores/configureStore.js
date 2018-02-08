@@ -15,31 +15,31 @@ var defaultSate = {
 //dispatch -> reducer (amount) -> returns state -> new redux state
 //reducer
 function amount(state = defaultSate ,action){
-    if(action.type==='CHANGE_ORIGIN_AMOUNT'){
-        //return Object.assign({}, state,{originAmount:action.data});
-        return {
-            ...state,
-            originAmount: action.data.newAmount
-        }
-    }
-    else if(action.type==='RECEIVED_CONVERSION_RATE_SUCCESS'){
-        return {
-            ...state,
-            conversionRate: action.data.xRate,
-            destinationAmount: action.data.destAmount
-        }
-    }
-    else if(action.type==='RECEIVED_FEES_SUCCESS'){
-        var newFeeAmount = action.data.feeAmount;
-        var newTotal = parseFloat(state.originAmount, 10) + parseFloat(newFeeAmount, 10);
+    switch (action.type) {
+        case ('CHANGE_ORIGIN_AMOUNT'):
+            return {
+                ...state,
+                originAmount: action.data.newAmount
+            };
+        case ('RECEIVED_CONVERSION_RATE_SUCCESS'):
+            return {
+                ...state,
+                conversionRate: action.data.xRate,
+                destinationAmount: action.data.destAmount
+            };
+        case ('RECEIVED_FEES_SUCCESS'):
+            var newFeeAmount = action.data.feeAmount;
+            var newTotal = parseFloat(state.originAmount, 10) + parseFloat(newFeeAmount, 10);
 
-        return {
-            ...state,
-            feeAmount: newFeeAmount,
-            totalCost: newTotal
-        }
+            return {
+                ...state,
+                feeAmount: newFeeAmount,
+                totalCost: newTotal
+            };
+
+        default:
+            return state;
     }
-    return state;
 }
 var logger = createLogger({collapsed: true});
 var store = createStore(amount, applyMiddleware(thunk, logger)); //logger needs to be last parameter
