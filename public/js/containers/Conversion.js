@@ -119,23 +119,28 @@ class Conversion extends React.Component {
         };
         this.props.dispatch(actions.fetchConversionRate(payload));
 
-
-
-
-        // get the new fee & total amount
-        this.makeFeeAjaxCall({
+        var feePayload = {
             originAmount: newAmount,
             originCurrency: this.state.originCurrency,
             destCurrency: this.state.destinationCurrency
+        };
 
-        }, (resp) => {
-            this.setState({
-                feeAmount: resp.feeAmount
-            })
-
-            this.calcNewTotal();
-        });
-
+        this.props.dispatch(actions.fetchFees(feePayload));
+        //
+        // // get the new fee & total amount
+        // this.makeFeeAjaxCall({
+        //     originAmount: newAmount,
+        //     originCurrency: this.state.originCurrency,
+        //     destCurrency: this.state.destinationCurrency
+        //
+        // }, (resp) => {
+        //     this.setState({
+        //         feeAmount: resp.feeAmount
+        //     })
+        //
+        //     this.calcNewTotal();
+        // });
+        //
 
     }
 
@@ -240,7 +245,7 @@ class Conversion extends React.Component {
                     <option value="USD">USD</option>
                     <option value="EUR">EUR</option>
                     <option value="JPY">JPY</option>
-                </select>
+                    </select>
                 to <input className="amount-field" onChange={this.handleDestAmountChange}
                           value={this.props.destinationAmount}/>&nbsp;
                 <select value={this.state.destinationCurrency} onChange={this.handleDestCurrencyChange}>
@@ -255,8 +260,8 @@ class Conversion extends React.Component {
                     originCurrency={this.state.originCurrency}
                     destinationCurrency={this.state.destinationCurrency}
                     conversionRate={this.props.conversionRate}
-                    fee={this.state.feeAmount}
-                    total={this.state.totalCost}
+                    fee={this.props.feeAmount}
+                    total={this.props.totalCost}
                 />
             </div>
         )
@@ -267,7 +272,9 @@ export default connect((state, props) => {
     return {
         originAmount: state.originAmount,
         destinationAmount: state.destinationAmount,
-        conversionRate: state.conversionRate
+        conversionRate: state.conversionRate,
+        feeAmount: state.feeAmount,
+        totalCost:state.totalCost
     }
 })(Conversion);
 
